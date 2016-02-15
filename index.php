@@ -25,7 +25,8 @@
 			<div class="span8 offset2">
 				<div class="tabbable">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#torrent2magnet" data-toggle="tab">种子转磁链</a></li>
+						<li class="active"><a href="#torrent2magnet" data-toggle="tab">种子文件转磁链</a></li>
+<!--						<li><a href="#url2magnet" data-toggle="tab">种子链接地址转磁链</a></li>-->
 						<li><a href="#magnet2torrent" data-toggle="tab">磁链转种子</a></li>
 					</ul>
 					<div class="tab-content">
@@ -33,6 +34,13 @@
 							<form>
 								<div id="queue"></div>
 								<input id="file_upload" name="file_upload" type="file" multiple="false" />
+							</form>
+							<div class="info"></div>
+						</div>
+						<div class="tab-pane" id="url2magnet">
+							<form class="form-search">
+								<input type="text" id="url" name="url" class="span6" placeholder="输入url地址" />
+								<input type="button" class="btn btn-primary" id="urlsubmit" name="submit" value="submit" />
 							</form>
 							<div class="info"></div>
 						</div>
@@ -90,6 +98,19 @@ $(document).ready(function(){
 			}
 			result.html('<div class="alert"><button type="button" class="close" data-dismiss="alert">×</button>' + strhtml + '</div>');
 		});// get  
+	});// click
+
+	$("#urlsubmit").click(function(){
+		var magneturl = $("#url")[0].value;
+		$.get("url2magnet.php", { magnet: encodeURIComponent(magneturl) },function(data){
+			var result = $('#magnet2torrent .info');
+			var obj = eval ("(" + data + ")");
+			var strhtml = 'The url ' + magneturl + ' is vailed! ';
+			if (obj.result) {
+				strhtml = '<a href="' + obj.url + '">' + obj.url + '</br>';
+			}
+			result.html('<div class="alert"><button type="button" class="close" data-dismiss="alert">×</button>' + strhtml + '</div>');
+		});// get
 	});// click
 });// ready
 </script>
